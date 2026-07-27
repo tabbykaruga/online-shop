@@ -24,7 +24,7 @@ function Product({ product }) {
                     </div>
                 </Card.Text>
                 <Card.Text as="h3">
-                    ${product.price}
+                    KSh {Number(product.price).toLocaleString('en-KE')}
                 </Card.Text>
             </Card.Body>
         </Card>

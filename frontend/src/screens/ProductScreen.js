@@ -34,7 +34,7 @@ function ProductScreen() {
                         </ListGroup.Item>
 
                         <ListGroup.Item style={{ borderTop: '1px solid #dee2e6' }}>
-                            Price : ${product.price}
+                            Price : KSh {Number(product.price).toLocaleString('en-KE')}
                         </ListGroup.Item>
 
                         <ListGroup.Item style={{ borderTop: '1px solid #dee2e6' }}>
@@ -48,7 +48,7 @@ function ProductScreen() {
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Price:</Col>
-                                    <Col><strong>${product.price}</strong></Col>
+                                    <Col><strong>KSh {Number(product.price).toLocaleString('en-KE')}</strong></Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item style={{ borderTop: '1px solid #dee2e6' }}>
