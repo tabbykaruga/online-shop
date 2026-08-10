@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
-import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { addToCart, removeFromCart } from '../actions/cartActions'
 
@@ -95,7 +94,7 @@ function CartScreen({ location }) {
                             <h2>SubTotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items</h2>
                             KSH {Number(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed()).toLocaleString('en-KE')}
                         </ListGroup.Item>
-                        <ListGroup.Item style={{ border: '1px solid #dee2e6' }}>
+                        <ListGroup.Item style={{ borderTop: '1px solid #dee2e6' }}>
                             <Button type='button'
                                 className='btn-block'
                                 disabled={cartItems.length === 0}

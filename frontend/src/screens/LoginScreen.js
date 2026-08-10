@@ -22,7 +22,7 @@ export default function LoginScreen() {
     useEffect(() => {
         //if already logged in
         if (userInfo) {
-            navigate(redirect)
+            navigate(`/${redirect}`)
         }
     }, [navigate, userInfo, redirect])
 
@@ -69,10 +69,7 @@ export default function LoginScreen() {
             <Row className='py-3'>
                 <Col>
                     New Customer?
-                    <Link to={redirect ?
-                        `/register?redirect${redirect}` :
-                        '/register'}
-                    >Register</Link>
+                    <Link to={redirect ? `/register?redirect${redirect}` : '/register'}>Register</Link>
                 </Col>
             </Row>
         </FormContainer>
