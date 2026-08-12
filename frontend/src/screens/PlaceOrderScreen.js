@@ -1,25 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button, Col, ListGroup, Row, Image, Card } from 'react-bootstrap'
 import CheckOutSteps from '../components/CheckOutSteps'
 import Message from '../components/Message'
+import { createOrder } from '../actions/orderActions'
+import { CREATE_ORDER_RESET } from '../constants/orderConst'
+import { CART_CLEAR_ITEMS } from '../constants/cartConst'
 
 function PlaceOrderScreen() {
+    const orderCreate = useSelector(state => state.createOrder)
+    const { order, error, success } = orderCreate
+
     const cart = useSelector(state => state.cart)
+    const dispacth = useDispatch()
+    const navigate = useNavigate()
 
     const itemPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     const shippingPrice = itemPrice > 100000 ? 0 : 200
     const totalPrice = Number(itemPrice) + Number(shippingPrice)
 
+    if (!cart.paymentMethod) {
+        navigate('/payment')
+    }
+
+    useEffect(() => {
+        if (success) {
+            navigate(`/order/${order._id}`)
+
+            //clear the order
+            dispacth({ type: CREATE_ORDER_RESET })
+        }
+
+    }, [success, navigate])
 
     const placeOrder = (e) => {
-        e.preventDefault()
+        dispacth(createOrder(
+            {
+                orderItems: cart.cartItems,
+                shippingAddress: cart.shippingAddress,
+                paymentMethod: cart.paymentMethod,
+                itemPrice: itemPrice,
+                shippingPrice: shippingPrice,
+                totalPrice: totalPrice,
+            }
+        ))
     }
 
     return (
         <div>
             <CheckOutSteps step1 step2 step3 step4 />
+
             <Row>
                 <Col md={8}>
                     <ListGroup variant='flush' style={{ border: '1px solid #dee2e6' }} >
@@ -35,7 +66,7 @@ function PlaceOrderScreen() {
                             </p>
                         </ListGroup.Item>
 
-                        <ListGroup.Item style={{ border: '1px solid #dee2e6' }}>
+                        <ListGroup.Item style={{ borderTop: '1px solid #dee2e6' }}>
                             <h2>Payment Method</h2>
                             <p>
                                 <strong>Payment Method: </strong>
@@ -99,6 +130,11 @@ function PlaceOrderScreen() {
                                     <Col>KSH {Number(totalPrice).toLocaleString('EN')}</Col>
                                 </Row>
                             </ListGroup.Item>
+
+                            <ListGroup.Item>
+                                {error && <Message variant='danger'>{error}</Message>}
+                            </ListGroup.Item>
+
                             <ListGroup.Item >
                                 <Button type='button' className='btn-block' disabled={cart.cartItems === 0} onClick={placeOrder}>Place Order</Button>
                             </ListGroup.Item>

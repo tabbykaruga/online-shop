@@ -62,10 +62,8 @@ function CartScreen({ location }) {
                                             onChange={(e) => dispacth(addToCart(item.product, Number(e.target.value)))}>
                                             {
                                                 [...Array(item.countInStock).keys()].map((x) => (
-                                                    <option value={x + 1} value={x + 1}>
-                                                        {
-                                                            x + 1
-                                                        }
+                                                    <option key={x + 1} value={x + 1}>
+                                                        {x + 1}
                                                     </option>
                                                 ))
                                             }
