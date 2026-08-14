@@ -1,36 +1,41 @@
-import React, { useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap';
-import Product from '../components/Product'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import { useDispatch, useSelector } from 'react-redux'
-import { listProducts } from '../actions/productActions'
+import React, { useEffect } from "react";
+import { Row, Col } from "react-bootstrap";
+import Product from "../components/Product";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import { useDispatch, useSelector } from "react-redux";
+import { listProducts } from "../actions/productActions";
 
 function HomeScreen() {
-    const dispatch = useDispatch()
-    const productList = useSelector(state => state.productList)
-    //desctruture the payload which we get from state
-    const { error, loading, products } = productList
+  const dispatch = useDispatch();
+  const productList = useSelector((state) => state.productList);
+  //desctruture the payload which we get from state
+  const { error, loading, products } = productList;
 
-    useEffect(() => {
-        dispatch(listProducts())
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(listProducts());
+  }, [dispatch]);
 
+  const renderContent = () => {
+    if (loading) return <Loader />;
+    if (error) return <Message variant="danger">{error}</Message>;
     return (
-        <div>
-            <h1>latest Products</h1>
-            {loading ? <Loader />
-                : error ? <Message variant='danger'> {error} </Message>
-                    : <Row>
-                        {products.map(product => (
-                            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                                <Product product={product}></Product>
-                            </Col>
-                        ))}
-                    </Row>
-            }
-        </div>
-    )
+      <Row>
+        {products.map((product) => (
+          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+            <Product product={product}></Product>
+          </Col>
+        ))}
+      </Row>
+    );
+  };
+
+  return (
+    <div>
+      <h1>latest Products</h1>
+      {renderContent()}
+    </div>
+  );
 }
 
-export default HomeScreen
+export default HomeScreen;

@@ -6,25 +6,33 @@ import {
     CART_SAVE_SHIPPING_ADDRESS
 } from '../constants/cartConst'
 
-export const cartReducer = (state = { cartItems: [], shippingAddress: {} }, action) => {
+const initialCartState = {
+    cartItems: [],
+    shippingAddress: {}
+}
+
+export const cartReducer = (state = initialCartState, action) => {
     switch (action.type) {
         case CART_ADD_ITEM:
-            //check if item already exist in cart
-            const item = action.payload
-            const existItem = state.cartItems.find(x => x.product === item.product)
+            {   
+                //check if item already exist in cart
+                const item = action.payload
+                const existItem = state.cartItems.find(x => x.product === item.product)
 
-            if (existItem) {
-                return {
-                    ...state,
-                    cartItems: state.cartItems.map(x =>
-                        x.product === existItem.product ? item : x
-                    )
+                if (existItem) {
+                    return {
+                        ...state,
+                        cartItems: state.cartItems.map(x =>
+                            x.product === existItem.product ? item : x
+                        )
+                    }
+                } else {
+                    return {
+                        ...state,
+                        cartItems: [...state.cartItems, item]
+                    }
                 }
-            } else {
-                return {
-                    ...state,
-                    cartItems: [...state.cartItems, item]
-                }
+                
             }
 
         case CART_REMOVE_ITEM:

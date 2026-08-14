@@ -9,12 +9,12 @@ from rest_framework import status
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def addOrderItems(request):
+def add_order_items(request):
     user = request.user
     data = request.data
 
-    orderItems = data["orderItems"]
-    if orderItems and len(orderItems) == 0:
+    order_items = data["orderItems"]
+    if order_items and len(order_items) == 0:
         return Response(
             {"error": "No Order Item to process"}, status=status.HTTP_400_BAD_REQUEST
         )
@@ -28,7 +28,7 @@ def addOrderItems(request):
         )
 
         # create shipping address
-        shipping = ShippingAddress.objects.create(
+        ShippingAddress.objects.create(
             order=order,
             address=data["shippingAddress"]["address"],
             city=data["shippingAddress"]["city"],
@@ -37,7 +37,7 @@ def addOrderItems(request):
         )
 
         # create order items and relatationship to order
-        for i in orderItems:
+        for i in order_items:
             product = Product.objects.get(_id=i["product"])
             item = OrderItem.objects.create(
                 product=product,
@@ -53,3 +53,25 @@ def addOrderItems(request):
 
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_order_by_id(request, pk):
+    user = request.user
+    order = Order.objects.get(_id=pk)
+
+    try:
+        if user.is_staff or order.user == user:
+            serializer = OrderSerializer(order, many=False)
+            return Response(serializer.data)
+        else:
+            Response(
+                {"error": "Not Authorized to view order"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    except Exception:
+        return Response(
+            {"error": "Order does not exist"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )

@@ -7,7 +7,11 @@ import {
     PRODUCT_DETAILS_FAILURE,
 } from '../constants/productConst'
 
-export const productListReducer = (state = { products: [] }, action) => {
+const initialProductState = {
+    products: []
+}
+
+export const productListReducer = (state = initialProductState, action) => {
     switch (action.type) {
         case PRODUCT_LIST_REQUEST:
             return { loading: true, products: [] }
@@ -23,7 +27,11 @@ export const productListReducer = (state = { products: [] }, action) => {
     }
 }
 
-export const productDetailsReducer = (state = { product: { reviews: [] } }, action) => {
+const initialProductDetailState ={
+     product: { reviews: [] } 
+}
+
+export const productDetailsReducer = (state = initialProductDetailState, action) => {
     switch (action.type) {
         case PRODUCT_DETAILS_REQUEST:
             return { loading: true, ...state }

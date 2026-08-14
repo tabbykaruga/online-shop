@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import *
+from .models import Product, Order, OrderItem, ShippingAddress
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -75,8 +75,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_shippingAddress(self, obj):
         try:
-            address = ShippingAddresSerializer(obj.shippingAddress, many=False)
-        except:
+            address = ShippingAddresSerializer(obj.shippingaddress, many=False).data
+        except Exception:
             address = False
 
         return address

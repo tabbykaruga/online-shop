@@ -1,4 +1,3 @@
-import { autoBatchEnhancer } from '@reduxjs/toolkit'
 import React from 'react'
 import { Spinner } from 'react-bootstrap'
 
