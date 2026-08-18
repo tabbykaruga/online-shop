@@ -6,6 +6,12 @@ import {
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAILURE,
+  ORDER_PAYMENT_REQUEST,
+  ORDER_PAYMENT_SUCCESS,
+  ORDER_PAYMENT_FAILURE,
+  USER_ORDER_LIST_REQUEST,
+  USER_ORDER_LIST_SUCCESS,
+  USER_ORDER_LIST_FAILURE,
 } from "../constants/orderConst";
 import { CART_CLEAR_ITEMS } from "../constants/cartConst";
 
@@ -71,6 +77,73 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAILURE,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
+
+export const payForOrder =
+  (id, paymentResult) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: ORDER_PAYMENT_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token} `,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/orders/${id}/pay/`,
+        paymentResult,
+        config,
+      );
+
+      dispatch({
+        type: ORDER_PAYMENT_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ORDER_PAYMENT_FAILURE,
+        payload: error.response?.data?.error
+          ? error.response.data.error
+          : error.message,
+      });
+    }
+  };
+
+export const getUserOrderList = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_ORDER_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token} `,
+      },
+    };
+
+    const { data } = await axios.get(`/api/orders/myorders/`, config);
+
+    dispatch({
+      type: USER_ORDER_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_ORDER_LIST_FAILURE,
       payload: error.response?.data?.error
         ? error.response.data.error
         : error.message,

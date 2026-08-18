@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Table } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDeatils, updateUserProfile } from "../actions/userActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConst";
-import OrderDetailsScreen from "./OrderDetailsScreen";
+import { getUserOrderList } from "../actions/orderActions";
 
 function ProfileScreen() {
   const navigate = useNavigate();
@@ -29,17 +30,21 @@ function ProfileScreen() {
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
 
+  const userOrderList = useSelector((state) => state.userOrderList);
+  const { loading: loadingOrders, error: orderError, orders } = userOrderList;
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
     } else if (!user?.name || success) {
       dispacth({ type: USER_UPDATE_PROFILE_RESET });
       dispacth(getUserDeatils("profile"));
+      dispacth(getUserOrderList());
     } else {
       setName(user.name);
       setEmail(user.email);
     }
-  }, [dispacth, navigate, userInfo, user, success]);
+  }, [dispacth, navigate, userInfo, user._id, success, user.name, user.email]);
 
   const getProfileHandler = (e) => {
     e.preventDefault();
@@ -125,7 +130,42 @@ function ProfileScreen() {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
-        <OrderDetailsScreen />
+        {loadingOrders && <Loader />}
+        {orderError && <Message variant={"danager"}>{orderError}</Message>}
+
+        <Table striped responsive className="table-sm">
+          <thead>
+            <tr>
+              <th>Order Id</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Paid</th>
+              <th>Delivered</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders?.map((order) => (
+              <tr key={order._id}>
+                <td>{order._id}</td>
+                <td>{order.createdAt.substring(0, 10)}</td>
+                <td>KSH {Number(order.totalPrice).toLocaleString("en-KE")}</td>
+                <td>
+                  {order.isPaid ? (
+                    order.paidAt.substring(0, 10)
+                  ) : (
+                    <i className="fas fa-times" style={{ color: "red" }} />
+                  )}
+                </td>
+                <td>
+                  <LinkContainer to={`/orders/${order._id}`}>
+                    <Button className="btn-sm">Details</Button>
+                  </LinkContainer>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </Col>
     </Row>
   );

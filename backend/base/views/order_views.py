@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from base.models import Product, Order, OrderItem, ShippingAddress
 from base.serializer import OrderSerializer
 from rest_framework import status
+from datetime import datetime
 
 
 @api_view(["POST"])
@@ -57,6 +58,15 @@ def add_order_items(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+def get_user_orders(request):
+    user = request.user
+    orders = user.order_set.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_order_by_id(request, pk):
     user = request.user
     order = Order.objects.get(_id=pk)
@@ -66,12 +76,37 @@ def get_order_by_id(request, pk):
             serializer = OrderSerializer(order, many=False)
             return Response(serializer.data)
         else:
-            Response(
+            return Response(
                 {"error": "Not Authorized to view order"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
     except Exception:
         return Response(
             {"error": "Order does not exist"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_order_to_paid(request, pk):
+    user = request.user
+    order = Order.objects.get(_id=pk)
+
+    try:
+        if user.is_staff or order.user == user:
+            order.isPaid = True
+            order.paidAt = datetime.now()
+
+            order.save()
+            return Response("Order was paid")
+        else:
+            return Response(
+                {"error": "Not Authorized to pay for the order"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    except Exception:
+        return Response(
+            {"error": "Order cannot be paid ny another user"},
             status=status.HTTP_400_BAD_REQUEST,
         )

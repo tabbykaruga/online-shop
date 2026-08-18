@@ -1,33 +1,100 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { Col, ListGroup, Row, Image, Card } from "react-bootstrap";
 import Message from "../components/Message";
-import { getOrderDetails } from "../actions/orderActions";
+import { getOrderDetails, payForOrder } from "../actions/orderActions";
 import Loader from "../components/Loader";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import MpesaButton from "../components/MpesaButton";
+import { ORDER_PAYMENT_RESET } from "../constants/orderConst";
+import { getUsdToKesRate, kshToUsd } from "../utils/currency";
+import { format } from "date-fns";
+
+const PAYPAL_CLIENT_ID =
+  "BAAYc4GCs7eY70AvDMR8m-vcXyD8PzNoot-tvGD9LJ22qdkCSu3jWg1K9JZmRQTG4xOgxcNtil9CBjWrWk";
 
 function OrderDetailsScreen({ match }) {
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
 
   const { orderId } = useParams();
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, error, loading } = orderDetails;
 
+  const payOrder = useSelector((state) => state.payOrder);
+  const { loading: loadingPay, success: successPay } = payOrder;
+
   const itemPrice =
     !loading && !error
       ? order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
       : 0;
+  const [usdRate, setUsdRate] = useState(null);
 
   useEffect(() => {
-    if (order?._id !== Number(orderId)) {
-      dispacth(getOrderDetails(orderId));
+    if (!orderId) return;
+    getUsdToKesRate().then(setUsdRate);
+    dispatch({ type: ORDER_PAYMENT_RESET });
+    dispatch(getOrderDetails(orderId));
+  }, [dispatch, orderId, successPay]);
+
+  const successPaymentHandler = (paymentResults) => {
+    dispatch(payForOrder(orderId, paymentResults));
+  };
+  const renderPaymentOptions = () => {
+    if (order.paymentMethod === "M-Pesa") {
+      return (
+        <MpesaButton
+          orderId={orderId}
+          amount={order.totalPrice}
+          onSuccess={successPaymentHandler}
+        />
+      );
     }
-  }, [dispacth, order, orderId]);
+
+    if (!usdRate) {
+      return <Loader />;
+    }
+
+    return (
+      <PayPalScriptProvider
+        options={{
+          "client-id": PAYPAL_CLIENT_ID,
+          currency: "USD",
+        }}
+      >
+        <p className="text-muted small">
+          ≈ ${kshToUsd(order.totalPrice, usdRate)} USD (charged in USD)
+        </p>
+        <PayPalButtons
+          style={{ layout: "vertical" }}
+          createOrder={(data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: kshToUsd(order.totalPrice, usdRate),
+                  },
+                },
+              ],
+            });
+          }}
+          onApprove={(data, actions) => {
+            return actions.order.capture().then((details) => {
+              successPaymentHandler(details);
+            });
+          }}
+        />
+      </PayPalScriptProvider>
+    );
+  };
 
   const renderContent = () => {
     if (loading) return <Loader />;
     if (error) return <Message variant="danger">{error}</Message>;
+    if (!order.orderItems || order.orderItems.length === 0) {
+      return <Message variant="danger">No order found.</Message>;
+    }
 
     return (
       <div>
@@ -52,15 +119,14 @@ function OrderDetailsScreen({ match }) {
                   {order.shippingAddress.postalCode},{"  "}
                   {order.shippingAddress.country}
                 </p>
-                <p>
-                  {order.isDelivered ? (
-                    <Message variant={"success"}>
-                      Delivered On {order.deliveredAt}
-                    </Message>
-                  ) : (
-                    <Message variant={"warning"}>Not yet Delivered</Message>
-                  )}
-                </p>
+
+                {order.isDelivered ? (
+                  <Message variant={"success"}>
+                    Delivered On {order.deliveredAt}
+                  </Message>
+                ) : (
+                  <Message variant={"warning"}>Not yet Delivered</Message>
+                )}
               </ListGroup.Item>
 
               <ListGroup.Item style={{ borderTop: "1px solid #dee2e6" }}>
@@ -72,7 +138,11 @@ function OrderDetailsScreen({ match }) {
                 <p>
                   {order.isPaid ? (
                     <Message variant={"success"}>
-                      Paid On {order.paidAt}
+                      Paid on{" "}
+                      {format(
+                        new Date(order.paidAt),
+                        "do MMMM yyyy 'at' h:mm a",
+                      )}
                     </Message>
                   ) : (
                     <Message variant={"warning"}>Not yet Paid</Message>
@@ -156,7 +226,12 @@ function OrderDetailsScreen({ match }) {
                   {error && <Message variant="danger">{error}</Message>}
                 </ListGroup.Item>
 
-                <ListGroup.Item></ListGroup.Item>
+                {!order.isPaid && (
+                  <ListGroup.Item>
+                    {loadingPay && <Loader />}
+                    {renderPaymentOptions()}
+                  </ListGroup.Item>
+                )}
               </ListGroup>
             </Card>
           </Col>
