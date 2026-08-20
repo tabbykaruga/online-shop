@@ -20,6 +20,7 @@ export const createOderReducer = (state = {}, action) => {
   switch (action.type) {
     case CREATE_ORDER_REQUEST:
       return {
+        ...state,
         loading: true,
       };
 
@@ -32,6 +33,7 @@ export const createOderReducer = (state = {}, action) => {
 
     case CREATE_ORDER_FAILURE:
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };
@@ -66,6 +68,7 @@ export const getOrderDetailsReducer = (state = intialGetOrderState, action) => {
 
     case ORDER_DETAILS_FAILURE:
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };
@@ -79,6 +82,7 @@ export const orderPaymentReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_PAYMENT_REQUEST:
       return {
+        ...state,
         loading: true,
       };
 
@@ -90,6 +94,7 @@ export const orderPaymentReducer = (state = {}, action) => {
 
     case ORDER_PAYMENT_FAILURE:
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };
@@ -106,10 +111,14 @@ const intialOrderListState = {
   orders: [],
 };
 
-export const getUserOrderListReducer = (state = intialOrderListState, action) => {
+export const getUserOrderListReducer = (
+  state = intialOrderListState,
+  action,
+) => {
   switch (action.type) {
     case USER_ORDER_LIST_REQUEST:
       return {
+        ...state,
         loading: true,
       };
 
@@ -121,6 +130,7 @@ export const getUserOrderListReducer = (state = intialOrderListState, action) =>
 
     case USER_ORDER_LIST_FAILURE:
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };

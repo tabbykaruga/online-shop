@@ -10,10 +10,10 @@ import {
   Form,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Rating from "../components/Rating";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
-import { listProductDetails } from "../actions/productActions";
+import Rating from "../../components/Rating";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
+import { listProductDetails } from "../../actions/productActions";
 
 function ProductScreen() {
   const { id } = useParams();
@@ -48,7 +48,7 @@ function ProductScreen() {
               <h3>{product.name}</h3>
             </ListGroup.Item>
 
-            <ListGroup.Item style={{ borderTop: "1px solid #dee2e6" }}>
+            <ListGroup.Item>
               <Rating
                 value={product.rating}
                 text={`${product.numReviews} reviews`}
@@ -56,17 +56,17 @@ function ProductScreen() {
               />
             </ListGroup.Item>
 
-            <ListGroup.Item style={{ borderTop: "1px solid #dee2e6" }}>
+            <ListGroup.Item>
               Price : KSh {Number(product.price).toLocaleString("en-KE")}
             </ListGroup.Item>
 
-            <ListGroup.Item style={{ borderTop: "1px solid #dee2e6" }}>
+            <ListGroup.Item>
               Description : ${product.description}
             </ListGroup.Item>
           </ListGroup>
         </Col>
         <Col md={3}>
-          <Card style={{ overflow: "hidden", border: "1px solid #dee2e6" }}>
+          <Card style={{ overflow: "hidden" }}>
             <ListGroup>
               <ListGroup.Item>
                 <Row>
@@ -79,7 +79,7 @@ function ProductScreen() {
                 </Row>
               </ListGroup.Item>
 
-              <ListGroup.Item style={{ borderTop: "1px solid #dee2e6" }}>
+              <ListGroup.Item>
                 <Row>
                   <Col>Status:</Col>
                   <Col>
@@ -90,7 +90,7 @@ function ProductScreen() {
 
               {/* dropdown at cart */}
               {product.countInStock > 0 && (
-                <ListGroup.Item style={{ borderTop: "1px solid #dee2e6" }}>
+                <ListGroup.Item>
                   <Row>
                     <Col>Quantty</Col>
                     <Col xs="auto" className="my-1">
@@ -99,11 +99,13 @@ function ProductScreen() {
                         value={qty}
                         onChange={(e) => setQty(e.target.value)}
                       >
-                        {[...new Array(product.countInStock).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
+                        {[...new Array(product.countInStock).keys()].map(
+                          (x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ),
+                        )}
                       </Form.Select>
                     </Col>
                   </Row>
@@ -116,6 +118,7 @@ function ProductScreen() {
                   type="button"
                   onClick={addToCartHandler}
                   disabled={product.countInStock === 0}
+                  variant="secondary"
                 >
                   Add to Cart
                 </Button>

@@ -2,16 +2,17 @@ import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import LoginScreen from "./screens/LoginScreen";
+import LoginScreen from "./screens/auth/LoginScreen";
+import RegisterScreen from "./screens/auth/RegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
-import ProductScreen from "./screens/ProductScreen";
-import CartScreen from "./screens/CartScreen";
-import RegisterScreen from "./screens/RegisterScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import ShippingScreen from "./screens/ShippingScreen";
-import PaymentScreen from "./screens/PaymentScreen";
-import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-import OrderDetailsScreen from "./screens/OrderDetailsScreen";
+import ProductScreen from "./screens/product/ProductScreen";
+import CartScreen from "./screens/order/CartScreen";
+import ProfileScreen from "./screens/users/ProfileScreen";
+import ShippingScreen from "./screens/order/ShippingScreen";
+import PaymentScreen from "./screens/order/PaymentScreen";
+import PlaceOrderScreen from "./screens/order/PlaceOrderScreen";
+import OrderDetailsScreen from "./screens/order/OrderDetailsScreen";
+import UserListScreen from "./screens/users/UserListScreen";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="admin/users/" element={<UserListScreen />} />
             <Route path="/shipping" element={<ShippingScreen />} />
             <Route path="/payment" element={<PaymentScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />

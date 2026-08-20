@@ -26,7 +26,7 @@ export const listProducts = () => async (dispacth) => {
         //dispatch error state with message
         dispacth({
             type: PRODUCT_LIST_FAILURE,
-            payload: error.response && error.response.data.error
+            payload: error.response?.data.error
                 ? error.response.data.error
                 : error.message
         })

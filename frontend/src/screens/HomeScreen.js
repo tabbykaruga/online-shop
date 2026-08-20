@@ -32,7 +32,7 @@ function HomeScreen() {
 
   return (
     <div>
-      <h1>latest Products</h1>
+      <h1>Latest Products</h1>
       {renderContent()}
     </div>
   );

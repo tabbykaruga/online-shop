@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col, Table } from "react-bootstrap";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
-import { getUserDeatils, updateUserProfile } from "../actions/userActions";
-import { USER_UPDATE_PROFILE_RESET } from "../constants/userConst";
-import { getUserOrderList } from "../actions/orderActions";
+import Message from "../../components/Message";
+import Loader from "../../components/Loader";
+import { getUserDeatils, updateUserProfile } from "../../actions/userActions";
+import { USER_UPDATE_PROFILE_RESET } from "../../constants/userConst";
+import { getUserOrderList } from "../../actions/orderActions";
 
 function ProfileScreen() {
   const navigate = useNavigate();

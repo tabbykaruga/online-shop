@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, ListGroup, Row, Image, Card } from "react-bootstrap";
-import CheckOutSteps from "../components/CheckOutSteps";
-import Message from "../components/Message";
-import { createOrder } from "../actions/orderActions";
-import { CREATE_ORDER_RESET } from "../constants/orderConst";
+import CheckOutSteps from "../../components/CheckOutSteps";
+import Message from "../../components/Message";
+import { createOrder } from "../../actions/orderActions";
+import { CREATE_ORDER_RESET } from "../../constants/orderConst";
 
 function PlaceOrderScreen() {
   const orderCreate = useSelector((state) => state.createOrder);

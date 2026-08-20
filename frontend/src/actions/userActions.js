@@ -14,8 +14,43 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAILURE,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAILURE,
+  USER_LIST_RESET,
 } from "../constants/userConst";
 import { USER_ORDER_LIST_RESET } from "../constants/orderConst";
+
+export const getUsersList = (id) => async (dispacth, getState) => {
+  try {
+    dispacth({ type: USER_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token} `,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/`, config);
+
+    dispacth({
+      type: USER_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispacth({
+      type: USER_LIST_FAILURE,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
 
 export const login = (email, password) => async (dispacth) => {
   try {
@@ -113,6 +148,10 @@ export const logout = () => async (dispacth) => {
   dispacth({
     type: USER_ORDER_LIST_RESET,
   });
+
+  dispacth({
+    type: USER_LIST_RESET,
+  });
 };
 
 export const getUserDeatils = (id) => async (dispacth, getState) => {
@@ -139,10 +178,9 @@ export const getUserDeatils = (id) => async (dispacth, getState) => {
   } catch (error) {
     dispacth({
       type: USER_DETAILS_FAILURE,
-      payload:
-        error.response?.data?.error
-          ? error.response.data.error
-          : error.message,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
     });
   }
 };
@@ -182,10 +220,9 @@ export const updateUserProfile = (user) => async (dispacth, getState) => {
   } catch (error) {
     dispacth({
       type: USER_UPDATE_PROFILE_FAILURE,
-      payload:
-        error.response?.data?.error
-          ? error.response.data.error
-          : error.message,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
     });
   }
 };

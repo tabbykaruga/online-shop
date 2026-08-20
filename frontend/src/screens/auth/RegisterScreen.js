@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
-import { register } from '../actions/userActions'
-import FormContainer from '../components/FormContainer'
+import Message from '../../components/Message'
+import Loader from '../../components/Loader'
+import { register } from '../../actions/userActions'
+import FormContainer from '../../components/FormContainer'
 
 function RegisterScreen() {
 

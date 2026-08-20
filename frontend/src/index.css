@@ -109,3 +109,12 @@ h3{
   .checkout-steps__connector { width: 14px; }
   .checkout-steps__link.nav-link { padding: 4px 3px; }
 }
+
+.table-sm td,
+.table-sm th {
+  border: 1px solid #dee2e6;
+}
+
+.table-sm {
+  border: 1px solid #dee2e6;
+}

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { Col, ListGroup, Row, Image, Card } from "react-bootstrap";
-import Message from "../components/Message";
-import { getOrderDetails, payForOrder } from "../actions/orderActions";
-import Loader from "../components/Loader";
+import Message from "../../components/Message";
+import { getOrderDetails, payForOrder } from "../../actions/orderActions";
+import Loader from "../../components/Loader";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import MpesaButton from "../components/MpesaButton";
-import { ORDER_PAYMENT_RESET } from "../constants/orderConst";
-import { getUsdToKesRate, kshToUsd } from "../utils/currency";
+import MpesaButton from "../../components/MpesaButton";
+import { ORDER_PAYMENT_RESET } from "../../constants/orderConst";
+import { getUsdToKesRate, kshToUsd } from "../../utils/currency";
 import { format } from "date-fns";
 
 const PAYPAL_CLIENT_ID =
