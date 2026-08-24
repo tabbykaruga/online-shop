@@ -1,21 +1,39 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, } from 'react-router-dom'
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button } from "react-bootstrap";
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
-import { getUsersList } from "../../actions/userActions";
+import Message from "../../../components/Message";
+import Loader from "../../../components/Loader";
+import { getUsersList, deleteUser } from "../../../actions/userActions";
 
 function UserListScreen() {
   const dispacth = useDispatch();
+  const navigate = useNavigate();
+
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
 
-  useEffect(() => {
-    dispacth(getUsersList());
-  }, [dispacth]);
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
 
-  const deleteUserHandler = (id) => {};
+  const userDelete = useSelector(state => state.userDelete)
+  const { success: successDelete } = userDelete
+
+  useEffect(() => {
+    if (userInfo || userInfo.isAdmin) {
+      dispacth(getUsersList());
+    }
+    else {
+      navigate("/login")
+    }
+  }, [dispacth, navigate, successDelete, userInfo]);
+
+  const deleteUserHandler = (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      dispacth(deleteUser(id))
+    }
+  };
 
   return (
     <div>
@@ -46,7 +64,7 @@ function UserListScreen() {
                 )}
               </td>
               <td>
-                <LinkContainer to={`/admin/user/${user._id}`}>
+                <LinkContainer to={`/admin/user/${user._id}/edit`}>
                   <Button variant="primary" className="btn-sm">
                     <i className="fas fa-edit"></i>
                   </Button>

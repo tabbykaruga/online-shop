@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col, Table } from "react-bootstrap";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
-import { getUserDeatils, updateUserProfile } from "../../actions/userActions";
+import { getUserDetails, updateUserProfile } from "../../actions/userActions";
 import { USER_UPDATE_PROFILE_RESET } from "../../constants/userConst";
 import { getUserOrderList } from "../../actions/orderActions";
 
@@ -36,9 +36,9 @@ function ProfileScreen() {
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
-    } else if (!user?.name || success) {
+    } else if (!user?.name || success || userInfo._id !== user._id) {
       dispacth({ type: USER_UPDATE_PROFILE_RESET });
-      dispacth(getUserDeatils("profile"));
+      dispacth(getUserDetails("profile"));
       dispacth(getUserOrderList());
     } else {
       setName(user.name);

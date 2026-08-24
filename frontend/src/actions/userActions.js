@@ -18,6 +18,12 @@ import {
   USER_LIST_SUCCESS,
   USER_LIST_FAILURE,
   USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAILURE,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAILURE,
 } from "../constants/userConst";
 import { USER_ORDER_LIST_RESET } from "../constants/orderConst";
 
@@ -154,7 +160,7 @@ export const logout = () => async (dispacth) => {
   });
 };
 
-export const getUserDeatils = (id) => async (dispacth, getState) => {
+export const getUserDetails = (id) => async (dispacth, getState) => {
   try {
     dispacth({ type: USER_DETAILS_REQUEST });
 
@@ -220,6 +226,78 @@ export const updateUserProfile = (user) => async (dispacth, getState) => {
   } catch (error) {
     dispacth({
       type: USER_UPDATE_PROFILE_FAILURE,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
+
+//ADMIN ACTIONS
+export const updateUser = (user) => async (dispacth, getState) => {
+  try {
+    dispacth({ type: USER_UPDATE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token} `,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/update/${user._id}/`,
+      user,
+      config,
+    );
+
+    dispacth({
+      type: USER_UPDATE_SUCCESS,
+    });
+
+    dispacth({
+      type: USER_DETAILS_SUCCESS,
+      payload: data
+    });
+
+  } catch (error) {
+    dispacth({
+      type: USER_UPDATE_FAILURE,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
+
+export const deleteUser = (id) => async (dispacth, getState) => {
+  try {
+    dispacth({ type: USER_DELETE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token} `,
+      },
+    };
+
+    const { data } = await axios.delete(`/api/users/delete/${id}/`, config);
+
+    dispacth({
+      type: USER_DELETE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispacth({
+      type: USER_DELETE_FAILURE,
       payload: error.response?.data?.error
         ? error.response.data.error
         : error.message,

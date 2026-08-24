@@ -5,11 +5,13 @@ import {
 } from "./reducers/productReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import {
+  userDeleteReducer,
   userDetailsReducer,
   userListReducer,
   userLoginReducer,
   userRegisterReducer,
   userUpdateProfileReducer,
+  userUpdateReducer,
 } from "./reducers/userReducers";
 import {
   createOderReducer,
@@ -57,6 +59,8 @@ const store = configureStore({
     orderDetails: getOrderDetailsReducer,
     payOrder: orderPaymentReducer,
     userOrderList: getUserOrderListReducer,
+    userUpdate: userUpdateReducer,
+    userDelete: userDeleteReducer,
   },
   preloadedState: initialState,
 });

@@ -99,7 +99,7 @@ function RegisterScreen() {
       </Form>
       <Row className='py-3'>
         <Col>
-          Nont a new Customer?
+          Not a new Customer?
           <Link to={redirect ?
             `/login?redirect${redirect}` :
             '/login'}

@@ -12,7 +12,8 @@ import ShippingScreen from "./screens/order/ShippingScreen";
 import PaymentScreen from "./screens/order/PaymentScreen";
 import PlaceOrderScreen from "./screens/order/PlaceOrderScreen";
 import OrderDetailsScreen from "./screens/order/OrderDetailsScreen";
-import UserListScreen from "./screens/users/UserListScreen";
+import UserListScreen from "./screens/users/adminView/UserListScreen";
+import EditUserScreen from "./screens/users/adminView/EditUserScreen";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="admin/users/" element={<UserListScreen />} />
+            <Route path="admin/user/:id/edit" element={<EditUserScreen />} />
             <Route path="/shipping" element={<ShippingScreen />} />
             <Route path="/payment" element={<PaymentScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
