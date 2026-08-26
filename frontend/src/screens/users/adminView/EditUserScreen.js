@@ -7,6 +7,8 @@ import FormContainer from '../../../components/FormContainer'
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 import { USER_UPDATE_RESET } from '../../../constants/userConst'
+
+
 function EditUserScreen() {
 
   const navigate = useNavigate()
@@ -26,14 +28,12 @@ function EditUserScreen() {
     if (updateSuccess) {
       dispacth({ type: USER_UPDATE_RESET })
       navigate("/admin/users")
+    } else if (!user.name || user._id !== Number(id)) {
+      dispacth(getUserDetails(id))
     } else {
-      if (!user.name || user._id !== Number(id)) {
-        dispacth(getUserDetails(id))
-      } else {
-        setName(user.name)
-        setEmail(user.email)
-        setIsAdmin(user.isAdmin)
-      }
+      setName(user.name)
+      setEmail(user.email)
+      setIsAdmin(user.isAdmin)
     }
   }, [dispacth, user, id, updateSuccess, navigate])
 

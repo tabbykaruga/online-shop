@@ -2,6 +2,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import {
   productListReducer,
   productDetailsReducer,
+  deleteProductReducer,
+  createProductReducer,
+  updateProductReducer,
 } from "./reducers/productReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import {
@@ -49,6 +52,10 @@ const store = configureStore({
   reducer: {
     productList: productListReducer,
     productDetails: productDetailsReducer,
+    addProduct: createProductReducer,
+    editProduct: updateProductReducer,
+    deleteProduct: deleteProductReducer,
+
     cart: cartReducer,
     userList: userListReducer,
     userLogin: userLoginReducer,

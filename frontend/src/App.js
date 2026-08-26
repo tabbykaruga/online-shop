@@ -14,6 +14,8 @@ import PlaceOrderScreen from "./screens/order/PlaceOrderScreen";
 import OrderDetailsScreen from "./screens/order/OrderDetailsScreen";
 import UserListScreen from "./screens/users/adminView/UserListScreen";
 import EditUserScreen from "./screens/users/adminView/EditUserScreen";
+import ProductsListScreen from "./screens/users/adminView/ProductsListScreen";
+import EditProductScreen from "./screens/users/adminView/EditProductScreen";
 
 function App() {
   return (
@@ -22,18 +24,26 @@ function App() {
       <main className="py-3">
         <Container>
           <Routes>
+            {/* auth */}
             <Route path="/" element={<HomeScreen />} />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
-            <Route path="admin/users/" element={<UserListScreen />} />
-            <Route path="admin/user/:id/edit" element={<EditUserScreen />} />
+            {/* orders */}
             <Route path="/shipping" element={<ShippingScreen />} />
             <Route path="/payment" element={<PaymentScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route path="/orders/:orderId" element={<OrderDetailsScreen />} />
+
+            {/* products */}
             <Route path="/product/:id" element={<ProductScreen />} />
             <Route path="/cart/:productId?" element={<CartScreen />} />
+
+            {/* admin */}
+            <Route path="admin/users/" element={<UserListScreen />} />
+            <Route path="admin/user/:id/edit" element={<EditUserScreen />} />
+            <Route path="/admin/productList/" element={<ProductsListScreen />} />
+            <Route path="/admin/product/:id/edit" element={<EditProductScreen />} />
           </Routes>
         </Container>
       </main>
