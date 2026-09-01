@@ -14,6 +14,13 @@ import {
   USER_ORDER_LIST_SUCCESS,
   USER_ORDER_LIST_FAILURE,
   USER_ORDER_LIST_RESET,
+  ORDER_LISTS_REQUEST,
+  ORDER_LISTS_SUCCESS,
+  ORDER_LISTS_FAILURE,
+  ORDER_DELIVERED_REQUEST,
+  ORDER_DELIVERED_SUCCESS,
+  ORDER_DELIVERED_FAILURE,
+  ORDER_DELIVERED_RESET,
 } from "../constants/orderConst";
 
 export const createOderReducer = (state = {}, action) => {
@@ -107,12 +114,41 @@ export const orderPaymentReducer = (state = {}, action) => {
   }
 };
 
-const intialOrderListState = {
+export const orderDeliveredReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_DELIVERED_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case ORDER_DELIVERED_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+
+    case ORDER_DELIVERED_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case ORDER_DELIVERED_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+const intialUserOrderListState = {
   orders: [],
 };
 
 export const getUserOrderListReducer = (
-  state = intialOrderListState,
+  state = intialUserOrderListState,
   action,
 ) => {
   switch (action.type) {
@@ -137,6 +173,36 @@ export const getUserOrderListReducer = (
 
     case USER_ORDER_LIST_RESET:
       return {};
+
+    default:
+      return state;
+  }
+};
+
+const intialOrdersListState = {
+  orders: [],
+};
+
+export const getOrdersListReducer = (state = intialOrdersListState, action) => {
+  switch (action.type) {
+    case ORDER_LISTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case ORDER_LISTS_SUCCESS:
+      return {
+        loading: false,
+        orders: action.payload,
+      };
+
+    case ORDER_LISTS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
 
     default:
       return state;

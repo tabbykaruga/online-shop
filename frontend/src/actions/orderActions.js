@@ -12,6 +12,12 @@ import {
   USER_ORDER_LIST_REQUEST,
   USER_ORDER_LIST_SUCCESS,
   USER_ORDER_LIST_FAILURE,
+  ORDER_LISTS_REQUEST,
+  ORDER_LISTS_SUCCESS,
+  ORDER_LISTS_FAILURE,
+  ORDER_DELIVERED_REQUEST,
+  ORDER_DELIVERED_SUCCESS,
+  ORDER_DELIVERED_FAILURE,
 } from "../constants/orderConst";
 import { CART_CLEAR_ITEMS } from "../constants/cartConst";
 
@@ -120,6 +126,41 @@ export const payForOrder =
     }
   };
 
+export const deliverOrder = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ORDER_DELIVERED_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token} `,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/orders/${id}/delivered/`,
+      {},
+      config,
+    );
+
+    dispatch({
+      type: ORDER_DELIVERED_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_DELIVERED_FAILURE,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
+
 export const getUserOrderList = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_ORDER_LIST_REQUEST });
@@ -144,6 +185,37 @@ export const getUserOrderList = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_ORDER_LIST_FAILURE,
+      payload: error.response?.data?.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
+
+export const getOrderLists = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ORDER_LISTS_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token} `,
+      },
+    };
+
+    const { data } = await axios.get(`/api/orders/`, config);
+
+    dispatch({
+      type: ORDER_LISTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_LISTS_FAILURE,
       payload: error.response?.data?.error
         ? error.response.data.error
         : error.message,

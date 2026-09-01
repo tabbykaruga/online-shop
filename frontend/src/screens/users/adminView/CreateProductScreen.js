@@ -1,58 +1,50 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import {
-  listProductDetails,
-  updateProduct,
-} from "../../../actions/productActions";
+import { createProduct } from "../../../actions/productActions";
 import FormContainer from "../../../components/FormContainer";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
-import { PRODUCT_UPDATE_RESET } from "../../../constants/productConst";
+import { PRODUCT_CREATE_RESET } from "../../../constants/productConst";
 
-function EditProductScreen() {
+function CreateProductScreen() {
   const navigate = useNavigate();
-  const dispacth = useDispatch();
-  const { id } = useParams();
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
-  const [imageFile, setImageFile] = useState(null);
 
-  const productDetails = useSelector((state) => state.productDetails);
-  const { error, loading, product } = productDetails;
-
-  const editProduct = useSelector((state) => state.editProduct);
+  const addProduct = useSelector((state) => state.addProduct);
   const {
-    error: errorEditing,
-    loading: loadingEdit,
-    success: successEditing,
-  } = editProduct;
+    error: errorCreating,
+    loading: creatingProduct,
+    success: successCreate,
+    product: createdProduct,
+  } = addProduct;
 
   useEffect(() => {
-    if (successEditing) {
-      dispacth({ type: PRODUCT_UPDATE_RESET });
-      navigate("/admin/productList/");
-    } else if (!product.name || product._id !== Number(id)) {
-      dispacth(listProductDetails(id));
-    } else {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
+    if (successCreate) {
+      dispatch({ type: PRODUCT_CREATE_RESET });
+      navigate(`/admin/productList/`);
     }
-  }, [dispacth, product, id, navigate, successEditing]);
+  }, [dispatch, navigate, successCreate, createdProduct]);
 
-  const updateProductHandler = async (e) => {
+  const uploadFileHandler = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const createProductHandler = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -62,40 +54,29 @@ function EditProductScreen() {
     formData.append("category", category);
     formData.append("countInStock", countInStock);
     formData.append("description", description);
-
     if (imageFile) {
       formData.append("image", imageFile);
     }
 
-    dispacth(updateProduct(id, formData));
-  };
-
-  const uploadFileHandler = (e) => {
-    const file = e.target.files[0]; // only takes the first file even if multiple selected
-    if (file) {
-      setImageFile(file);
-      setImage(URL.createObjectURL(file)); // local preview
-    }
+    dispatch(createProduct(formData));
   };
 
   return (
     <div>
       <Link to="/admin/productList/">Go Back</Link>
       <FormContainer>
-        <h1>Edit Product</h1>
-        {error && <Message variant="danger">{error}</Message>}
-        {loading && <Loader></Loader>}
-        {errorEditing && <Message variant="danger">{errorEditing}</Message>}
+        <h1>Create Product</h1>
+        {errorCreating && <Message variant="danger">{errorCreating}</Message>}
 
-        <Form onSubmit={updateProductHandler}>
+        <Form onSubmit={createProductHandler}>
           <Form.Group controlId="name" className="py-3">
             <Form.Label>Product Name</Form.Label>
             <Form.Control
-              type="name"
+              type="text"
               placeholder="Enter name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-            ></Form.Control>
+            />
           </Form.Group>
 
           <Form.Group controlId="price" className="py-3">
@@ -105,14 +86,18 @@ function EditProductScreen() {
               placeholder="Enter price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-            ></Form.Control>
+            />
           </Form.Group>
 
           <Form.Group controlId="image" className="py-3">
             <Form.Label>Image</Form.Label>
-            {image && (
+            {imagePreview && (
               <div className="mb-2">
-                <img src={image} alt="preview" style={{ maxWidth: "150px" }} />
+                <img
+                  src={imagePreview}
+                  alt="preview"
+                  style={{ maxWidth: "150px" }}
+                />
               </div>
             )}
             <Form.Control
@@ -129,7 +114,7 @@ function EditProductScreen() {
               placeholder="Enter Brand"
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
-            ></Form.Control>
+            />
           </Form.Group>
 
           <Form.Group controlId="countInStock" className="py-3">
@@ -139,7 +124,7 @@ function EditProductScreen() {
               placeholder="Enter count in stock"
               value={countInStock}
               onChange={(e) => setCountInStock(e.target.value)}
-            ></Form.Control>
+            />
           </Form.Group>
 
           <Form.Group controlId="category" className="py-3">
@@ -149,7 +134,7 @@ function EditProductScreen() {
               placeholder="Enter category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-            ></Form.Control>
+            />
           </Form.Group>
 
           <Form.Group controlId="description" className="py-3">
@@ -160,21 +145,20 @@ function EditProductScreen() {
               placeholder="Enter description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            ></Form.Control>
+            />
           </Form.Group>
-
+          {creatingProduct && <Loader />}
           <Row className="py-3">
             <Col className="text-center">
               <Button type="submit" variant="primary">
-                Update Product
+                Create Product
               </Button>
             </Col>
           </Row>
-          {loadingEdit && <Loader></Loader>}
         </Form>
       </FormContainer>
     </div>
   );
 }
 
-export default EditProductScreen;
+export default CreateProductScreen;

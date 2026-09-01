@@ -26,15 +26,19 @@ def get_product(request, pk):
 @permission_classes([IsAdminUser])
 def create_product(request):
     user = request.user
+    data = request.data
+
     product = Product.objects.create(
         user=user,
-        name="Sample Name",
-        price=0,
-        brand="Sample brand",
-        countInStock=0,
-        category="Sample category",
-        description="",
+        name=data.get("name", ""),
+        price=data.get("price", 0),
+        brand=data.get("brand", ""),
+        countInStock=data.get("countInStock", 0),
+        category=data.get("category", ""),
+        description=data.get("description", ""),
+        image=request.FILES.get("image"),
     )
+    
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
 
@@ -51,6 +55,8 @@ def update_product(request, pk):
     product.countInStock = data["countInStock"]
     product.category = data["category"]
     product.description = data["description"]
+    if "image" in request.FILES:
+        product.image = request.FILES["image"]
 
     product.save()
 

@@ -19,7 +19,9 @@ import {
 import {
   createOderReducer,
   getOrderDetailsReducer,
+  getOrdersListReducer,
   getUserOrderListReducer,
+  orderDeliveredReducer,
   orderPaymentReducer,
 } from "./reducers/orderReducers";
 
@@ -62,10 +64,14 @@ const store = configureStore({
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
+
+    orderList: getOrdersListReducer,
     createOrder: createOderReducer,
     orderDetails: getOrderDetailsReducer,
     payOrder: orderPaymentReducer,
+    deliverOrder: orderDeliveredReducer,
     userOrderList: getUserOrderListReducer,
+
     userUpdate: userUpdateReducer,
     userDelete: userDeleteReducer,
   },

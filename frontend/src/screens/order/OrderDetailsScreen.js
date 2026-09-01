@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { Col, ListGroup, Row, Image, Card } from "react-bootstrap";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Col, ListGroup, Row, Image, Card, Button } from "react-bootstrap";
 import Message from "../../components/Message";
-import { getOrderDetails, payForOrder } from "../../actions/orderActions";
+import {
+  getOrderDetails,
+  payForOrder,
+  deliverOrder,
+} from "../../actions/orderActions";
 import Loader from "../../components/Loader";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import MpesaButton from "../../components/MpesaButton";
-import { ORDER_PAYMENT_RESET } from "../../constants/orderConst";
+import {
+  ORDER_PAYMENT_RESET,
+  ORDER_DELIVERED_RESET,
+} from "../../constants/orderConst";
 import { getUsdToKesRate, kshToUsd } from "../../utils/currency";
 import { format } from "date-fns";
 
@@ -16,14 +23,22 @@ const PAYPAL_CLIENT_ID =
 
 function OrderDetailsScreen({ match }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { orderId } = useParams();
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, error, loading } = orderDetails;
 
   const payOrder = useSelector((state) => state.payOrder);
   const { loading: loadingPay, success: successPay } = payOrder;
+
+  const orderDelivery = useSelector((state) => state.deliverOrder);
+  const { loading: loadingDeliveryStatus, success: deliveryStatusSuccess } =
+    orderDelivery;
 
   const itemPrice =
     !loading && !error
@@ -33,14 +48,31 @@ function OrderDetailsScreen({ match }) {
 
   useEffect(() => {
     if (!orderId) return;
+    if (!userInfo) {
+      navigate("/login");
+    }
+
     getUsdToKesRate().then(setUsdRate);
     dispatch({ type: ORDER_PAYMENT_RESET });
+    dispatch({ type: ORDER_DELIVERED_RESET });
     dispatch(getOrderDetails(orderId));
-  }, [dispatch, orderId, successPay]);
+  }, [
+    dispatch,
+    orderId,
+    successPay,
+    deliveryStatusSuccess,
+    userInfo,
+    navigate,
+  ]);
 
   const successPaymentHandler = (paymentResults) => {
     dispatch(payForOrder(orderId, paymentResults));
   };
+
+  const deliveryHandler = () => {
+    dispatch(deliverOrder(orderId));
+  };
+
   const renderPaymentOptions = () => {
     if (order.paymentMethod === "M-Pesa") {
       return (
@@ -226,11 +258,25 @@ function OrderDetailsScreen({ match }) {
                   {error && <Message variant="danger">{error}</Message>}
                 </ListGroup.Item>
 
-                {!order.isPaid && (
+                {!order.isPaid ? (
                   <ListGroup.Item>
                     {loadingPay && <Loader />}
                     {renderPaymentOptions()}
                   </ListGroup.Item>
+                ) : (
+                  userInfo.isAdmin &&
+                  !order.isDelivered && (
+                    <ListGroup.Item>
+                      {loadingDeliveryStatus && <Loader />}
+                      <Button
+                        type="button"
+                        className="btn btn-block"
+                        onClick={deliveryHandler}
+                      >
+                        Mark As Delivered
+                      </Button>
+                    </ListGroup.Item>
+                  )
                 )}
               </ListGroup>
             </Card>
