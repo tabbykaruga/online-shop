@@ -19,10 +19,10 @@ function OrderListScreen() {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo || userInfo.isAdmin) {
-      dispacth(getOrderLists());
-    } else {
+    if (!userInfo.isAdmin) {
       navigate("/login");
+    } else {
+      dispacth(getOrderLists());
     }
   }, [dispacth, navigate, userInfo]);
 
