@@ -1,0 +1,264 @@
+/* ---- tokens ---- */
+:root {
+  --ink: #15171c;
+  --muted: #6b7280;
+  --line: #e7e5df;
+  --accent: #2f3c7e;
+  --accent-hover: #253064;
+  --amber: #e8a33d;
+  --ok: #1c7c4d;
+  --danger: #b3261e;
+}
+
+.pd-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  color: var(--ink);
+}
+
+.pd-back {
+  display: inline-block;
+  margin: 24px 0;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+}
+.pd-back:hover {
+  color: var(--ink);
+}
+
+/* ---- top section ---- */
+.pd-top {
+  align-items: flex-start;
+}
+
+.pd-gallery img {
+  border-radius: 4px;
+  width: 100%;
+}
+
+.pd-info {
+  padding-top: 4px;
+}
+
+.pd-brand {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.pd-title {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  max-width: 26ch;
+}
+
+.pd-rating-row {
+  margin-bottom: 18px;
+}
+
+.pd-desc {
+  color: var(--ink);
+  line-height: 1.6;
+  max-width: 62ch;
+  font-size: 15px;
+}
+
+/* ---- sticky buy box ---- */
+.pd-buybox {
+  position: sticky;
+  top: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.pd-buybox-price {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.pd-buybox-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.pd-instock {
+  color: var(--ok);
+  font-weight: 600;
+}
+.pd-outstock {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.pd-qty-select {
+  width: auto;
+  padding: 4px 28px 4px 10px;
+}
+
+.pd-cta {
+  width: 100%;
+  margin-top: 16px;
+  background: var(--accent);
+  border-color: var(--accent);
+  padding: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+.pd-cta:hover,
+.pd-cta:focus {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.pd-cta-inline {
+  width: auto;
+  padding: 8px 24px;
+}
+
+/* ---- reviews ---- */
+.pd-reviews-section {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.pd-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.pd-rating-summary {
+  display: flex;
+  gap: 40px;
+  padding: 20px 0 28px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.pd-rating-summary-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.pd-rating-number {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pd-rating-count {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pd-rating-bars {
+  flex: 1;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pd-rating-bar-row {
+  display: grid;
+  grid-template-columns: 12px 1fr 20px;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pd-rating-bar-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.pd-rating-bar-fill {
+  height: 100%;
+  background: var(--amber);
+}
+
+.pd-review-list {
+  list-style: none;
+  margin: 0 0 40px;
+  padding: 0;
+}
+
+.pd-review {
+  display: flex;
+  gap: 14px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.pd-review:first-child {
+  border-top: none;
+}
+
+.pd-review-avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pd-review-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.pd-review-date {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pd-review-comment {
+  margin-top: 8px;
+  line-height: 1.6;
+  font-size: 14.5px;
+}
+
+/* ---- write a review ---- */
+.pd-write-review {
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  max-width: 480px;
+}
+
+.pd-form-group {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 991px) {
+  .pd-buybox {
+    position: static;
+    margin-top: 24px;
+  }
+  .pd-rating-summary {
+    flex-direction: column;
+    gap: 20px;
+  }
+}

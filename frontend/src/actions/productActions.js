@@ -20,13 +20,13 @@ import {
   PRODUCT_CREATE_REVIEW_FAILURE,
 } from "../constants/productConst";
 
-export const listProducts = () => async (dispacth) => {
+export const listProducts = (keyword = '') => async (dispacth) => {
   try {
     //call the state for loading
     dispacth({ type: PRODUCT_LIST_REQUEST });
 
     //hit endpoint
-    const { data } = await axios.get("/api/products/");
+    const { data } = await axios.get(`/api/products${keyword}`);
 
     //map the data
     dispacth({
