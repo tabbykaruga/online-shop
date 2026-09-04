@@ -112,23 +112,15 @@ def create_product_review(request, pk):
     Review.objects.create(
         user=user,
         product=product,
-        name=user.name,
+        name=user.first_name if user.first_name else user.email,
         rating=rating,
         comment=comment,
     )
 
     reviews = product.review_set.all()
+    count = reviews.count()
     product.numReviews = reviews.count()
-    product.rating = sum(r.rating for r in reviews) / product.numReviews
+    product.rating = (sum(r.rating for r in reviews) / count) if count else 0
     product.save()
 
     return Response({"detail": "Review Added"}, status=status.HTTP_201_CREATED)
-
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def get_product_review(request, pk):
-    product = Product.objects.get(_id=pk)
-    product.delete()
-
-    return Response("")
