@@ -6,6 +6,7 @@ import {
   createProductReducer,
   updateProductReducer,
   createProductReviewReducer,
+  getTopRatedProductsReducer,
 } from "./reducers/productReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import {
@@ -55,6 +56,7 @@ const store = configureStore({
   reducer: {
     productList: productListReducer,
     productDetails: productDetailsReducer,
+    topRatedProducts: getTopRatedProductsReducer,
     addProduct: createProductReducer,
     editProduct: updateProductReducer,
     deleteProduct: deleteProductReducer,

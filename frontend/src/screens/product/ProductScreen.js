@@ -11,7 +11,7 @@ import {
 } from "../../actions/productActions";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../../constants/productConst";
 import { format } from "date-fns";
-import "./ProductScreen.css";
+
 
 function ProductScreen() {
   const { id } = useParams();
@@ -103,9 +103,8 @@ function ProductScreen() {
               <div className="pd-rating-row">
                 <Rating
                   value={product.rating}
-                  text={`${product.numReviews} review${
-                    product.numReviews === 1 ? "" : "s"
-                  }`}
+                  text={`${product.numReviews} review${product.numReviews === 1 ? "" : "s"
+                    }`}
                   color={"#E8A33D"}
                 />
               </div>

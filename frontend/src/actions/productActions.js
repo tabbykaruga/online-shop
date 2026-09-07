@@ -18,6 +18,9 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAILURE,
+  TOP_PRODUCTS_REQUEST,
+  TOP_PRODUCTS_SUCCESS,
+  TOP_PRODUCTS_FAILURE,
 } from "../constants/productConst";
 
 export const listProducts = (keyword = '') => async (dispacth) => {
@@ -37,6 +40,26 @@ export const listProducts = (keyword = '') => async (dispacth) => {
     //dispatch error state with message
     dispacth({
       type: PRODUCT_LIST_FAILURE,
+      payload: error.response?.data.error
+        ? error.response.data.error
+        : error.message,
+    });
+  }
+};
+
+export const topRatedProducts = () => async (dispacth) => {
+  try {
+    dispacth({ type: TOP_PRODUCTS_REQUEST });
+
+    const { data } = await axios.get(`/api/products/top/`);
+
+    dispacth({
+      type: TOP_PRODUCTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispacth({
+      type: TOP_PRODUCTS_FAILURE,
       payload: error.response?.data.error
         ? error.response.data.error
         : error.message,

@@ -20,12 +20,14 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAILURE,
   PRODUCT_CREATE_REVIEW_RESET,
+  TOP_PRODUCTS_REQUEST,
+  TOP_PRODUCTS_SUCCESS,
+  TOP_PRODUCTS_FAILURE,
 } from "../constants/productConst";
 
 const initialProductState = {
   products: [],
 };
-
 export const productListReducer = (state = initialProductState, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
@@ -47,10 +49,33 @@ export const productListReducer = (state = initialProductState, action) => {
   }
 };
 
+
+const initialTopRatedProductsState = {
+  products: [],
+};
+export const getTopRatedProductsReducer = (
+  state = initialTopRatedProductsState,
+  action,
+) => {
+  switch (action.type) {
+    case TOP_PRODUCTS_REQUEST:
+      return { ...state, loading: true, products: [] };
+
+    case TOP_PRODUCTS_SUCCESS:
+      return { loading: false, success: true, products: action.payload };
+
+    case TOP_PRODUCTS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};
+
+
 const initialProductDetailState = {
   product: { reviews: [] },
 };
-
 export const productDetailsReducer = (
   state = initialProductDetailState,
   action,
@@ -69,6 +94,7 @@ export const productDetailsReducer = (
       return state;
   }
 };
+
 
 export const createProductReducer = (state = {}, action) => {
   switch (action.type) {
@@ -89,10 +115,10 @@ export const createProductReducer = (state = {}, action) => {
   }
 };
 
+
 const initialUpdateProductState = {
   product: {},
 };
-
 export const updateProductReducer = (
   state = initialUpdateProductState,
   action,
@@ -115,6 +141,7 @@ export const updateProductReducer = (
   }
 };
 
+
 export const deleteProductReducer = (state = {}, action) => {
   switch (action.type) {
     case PRODUCT_DELETE_REQUEST:
@@ -130,7 +157,6 @@ export const deleteProductReducer = (state = {}, action) => {
       return state;
   }
 };
-
 
 
 export const createProductReviewReducer = (
