@@ -12,7 +12,10 @@ function SearchBox() {
         e.preventDefault()
 
         if (keyWord) {
-            navigate(`/?keyword=${keyWord}`)
+            navigate({
+                pathname: '/',
+                search: `?keyword=${keyWord}&page=1`
+            })
         } else {
             navigate(location.pathname)
         }
