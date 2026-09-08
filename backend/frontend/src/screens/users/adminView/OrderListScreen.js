@@ -50,35 +50,37 @@ function OrderListScreen() {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order._id}>
-              <td>{order._id}</td>
-              <td>{order.user?.name}</td>
-              <td>{order.paymentMethod}</td>
-              <td>
-                {order.isPaid ? (
-                  format(new Date(order.paidAt), "d/MM/yy ")
-                ) : (
-                  <i className="fas fa-close" style={{ color: "red" }}></i>
-                )}
-              </td>
-              <td>
-                {order.isDelivered ? (
-                  format(new Date(order.deliveredAt), "d/MM/yy ")
-                ) : (
-                  <i className="fas fa-close" style={{ color: "red" }}></i>
-                )}
-              </td>
-              <td>KSH {Number(order.totalPrice).toLocaleString("en-Ke")}</td>
-              <td>
-                <LinkContainer to={`/orders/${order._id}`}>
-                  <Button variant="primary" className="btn-sm">
-                    Details
-                  </Button>
-                </LinkContainer>
-              </td>
-            </tr>
-          ))}
+          {[...orders]
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .map((order) => (
+              <tr key={order._id}>
+                <td>{order._id}</td>
+                <td>{order.user?.name}</td>
+                <td>{order.paymentMethod}</td>
+                <td>
+                  {order.isPaid ? (
+                    format(new Date(order.paidAt), "d/MM/yy ")
+                  ) : (
+                    <i className="fas fa-close" style={{ color: "red" }}></i>
+                  )}
+                </td>
+                <td>
+                  {order.isDelivered ? (
+                    format(new Date(order.deliveredAt), "d/MM/yy ")
+                  ) : (
+                    <i className="fas fa-close" style={{ color: "red" }}></i>
+                  )}
+                </td>
+                <td>KSH {Number(order.totalPrice).toLocaleString("en-Ke")}</td>
+                <td>
+                  <LinkContainer to={`/orders/${order._id}`}>
+                    <Button variant="primary" className="btn-sm">
+                      Details
+                    </Button>
+                  </LinkContainer>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </div>
