@@ -96,7 +96,7 @@ ROOT_URLCONF = "backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "frontend/build")],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -163,7 +163,6 @@ STORAGES = {
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    BASE_DIR / "frontend/build/static",
 ]
 
 MEDIA_ROOT = "static/images"
