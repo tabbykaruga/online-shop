@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Carousel, Image } from 'react-bootstrap'
-import Message from "../components/Message"
-import Loader from "../components/Loader"
+import Message from "./Message"
+import Loader from "./Loader"
 import { topRatedProducts } from '../actions/productActions'
 
 function ProductCarousel() {
