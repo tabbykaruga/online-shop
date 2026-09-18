@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import axios from "axios";
 import Message from "./Message";
 
 function MpesaButton({ orderId, amount, onSuccess }) {
