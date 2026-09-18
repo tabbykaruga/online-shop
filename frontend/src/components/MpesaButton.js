@@ -11,18 +11,18 @@ function MpesaButton({ orderId, amount, onSuccess }) {
   const handlePay = async () => {
     setStatus("requesting");
     setError(null);
-    try {
-      const { data } = await axios.post(`/api/orders/${orderId}/pay-mpesa/`, {
-        phone,
-        amount,
-      });
-      setStatus("pending");
-      // You'll likely need to poll or use a webhook-driven status check here
-      // e.g. poll /api/orders/{orderId}/mpesa-status/ every few seconds
-    } catch (err) {
-      setStatus("error");
-      setError(err.response?.data?.error || err.message);
-    }
+    // try {
+    //   const { data } = await axios.post(`/api/orders/${orderId}/pay-mpesa/`, {
+    //     phone,
+    //     amount,
+    //   });
+    //   setStatus("pending");
+    //   // You'll likely need to poll or use a webhook-driven status check here
+    //   // e.g. poll /api/orders/{orderId}/mpesa-status/ every few seconds
+    // } catch (err) {
+    //   setStatus("error");
+    //   setError(err.response?.data?.error || err.message);
+    // }
   };
 
   return (

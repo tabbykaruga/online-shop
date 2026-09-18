@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../api/axios";
 import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
