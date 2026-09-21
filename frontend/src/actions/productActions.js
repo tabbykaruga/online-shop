@@ -29,7 +29,7 @@ export const listProducts = (keyword = '') => async (dispacth) => {
     dispacth({ type: PRODUCT_LIST_REQUEST });
 
     //hit endpoint
-    const { data } = await axios.get(`/api/products${keyword}`);
+    const { data } = await axios.get(`/api/products${keyword}/`);
 
     //map the data
     dispacth({
@@ -71,7 +71,7 @@ export const listProductDetails = (id) => async (dispacth) => {
   try {
     dispacth({ type: PRODUCT_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/api/products/${id}`);
+    const { data } = await axios.get(`/api/products/${id}/`);
 
     dispacth({
       type: PRODUCT_DETAILS_SUCCESS,
