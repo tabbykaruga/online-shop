@@ -165,7 +165,7 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = "static/images"
 
 CORS_ALLOWED_ORIGINS = [
-    "https://your-frontend.vercel.app",
+    "https://online-shop-jade-eta.vercel.app",
 ]
 
 ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com"]
