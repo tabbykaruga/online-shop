@@ -147,6 +147,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+WHITENOISE_MANIFEST_STRICT = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
