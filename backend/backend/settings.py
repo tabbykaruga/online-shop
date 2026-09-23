@@ -194,6 +194,6 @@ STATICFILES_DIRS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://online-shop-jade-eta.vercel.app/",
+    "https://online-shop-jade-eta.vercel.app",
     "http://localhost:3000",
 ]
