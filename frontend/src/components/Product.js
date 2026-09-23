@@ -5,11 +5,15 @@ import { Link } from "react-router-dom";
 
 function Product({ product }) {
   return (
-    <Card className="my-3 p-3 rounded h-100 d-flex flex-column" style={{ overflow: "hidden" }}>
+    <Card className="my-3 p-3 rounded h-100 d-flex flex-column border" style={{ border: "1px solid #dee2e6", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
       <Link to={`/product/${product._id}`}>
         <Card.Img
           src={product.image}
-          style={{ height: "200px", objectFit: "cover" }}
+          style={{
+            height: "200px",
+            objectFit: "contain",
+            padding: "10px",
+          }}
         />
       </Link>
       <Card.Body className="d-flex flex-column flex-grow-1">

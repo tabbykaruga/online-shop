@@ -18,8 +18,7 @@ import {
 import { getUsdToKesRate, kshToUsd } from "../../utils/currency";
 import { format } from "date-fns";
 
-const PAYPAL_CLIENT_ID =
-  "BAAYc4GCs7eY70AvDMR8m-vcXyD8PzNoot-tvGD9LJ22qdkCSu3jWg1K9JZmRQTG4xOgxcNtil9CBjWrWk";
+const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 
 function OrderDetailsScreen({ match }) {
   const dispatch = useDispatch();
@@ -39,6 +38,8 @@ function OrderDetailsScreen({ match }) {
   const orderDelivery = useSelector((state) => state.deliverOrder);
   const { loading: loadingDeliveryStatus, success: deliveryStatusSuccess } =
     orderDelivery;
+
+  const [showTestNotice, setShowTestNotice] = useState(false);
 
   const itemPrice =
     !loading && !error
@@ -98,7 +99,7 @@ function OrderDetailsScreen({ match }) {
         <p className="text-muted small">
           ≈ ${kshToUsd(order.totalPrice, usdRate)} USD (charged in USD)
         </p>
-        <PayPalButtons
+        {/* <PayPalButtons
           style={{ layout: "vertical" }}
           createOrder={(data, actions) => {
             return actions.order.create({
@@ -116,7 +117,20 @@ function OrderDetailsScreen({ match }) {
               successPaymentHandler(details);
             });
           }}
+        /> */}
+        <PayPalButtons
+          style={{ layout: "vertical" }}
+          createOrder={() => {
+            return Promise.reject(
+              new Error("Test account: PayPal disabled")
+            );
+          }}
+          onError={(err) => {
+            console.error("PayPal error:", err);
+            setShowTestNotice(true);
+          }}
         />
+
       </PayPalScriptProvider>
     );
   };
@@ -257,7 +271,11 @@ function OrderDetailsScreen({ match }) {
                 <ListGroup.Item>
                   {error && <Message variant="danger">{error}</Message>}
                 </ListGroup.Item>
-
+                {showTestNotice && (
+                  <Message variant="danger">
+                    This is a test account — PayPal payments cannot be processed.
+                  </Message>
+                )}
                 {!order.isPaid ? (
                   <ListGroup.Item>
                     {loadingPay && <Loader />}

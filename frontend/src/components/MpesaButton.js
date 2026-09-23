@@ -6,10 +6,12 @@ function MpesaButton({ orderId, amount, onSuccess }) {
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState("idle"); // idle | requesting | pending | error
   const [error, setError] = useState(null);
+  const [showTestNotice, setShowTestNotice] = useState(false);
 
   const handlePay = async () => {
     setStatus("requesting");
     setError(null);
+    setShowTestNotice(true);
     // try {
     //   const { data } = await axios.post(`/api/orders/${orderId}/pay-mpesa/`, {
     //     phone,
@@ -26,6 +28,11 @@ function MpesaButton({ orderId, amount, onSuccess }) {
 
   return (
     <div>
+      {showTestNotice && (
+        <Message variant="danger">
+          This is a test account — M-pesa payments cannot be processed.
+        </Message>
+      )}
       <Form.Group className="mb-2">
         <Form.Label>M-Pesa Phone Number</Form.Label>
         <Form.Control
