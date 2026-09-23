@@ -83,7 +83,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -190,10 +189,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com"]
-# ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com", "127.0.0.1", "localhost"]
 
 CORS_ALLOWED_ORIGINS = [
     "https://online-shop-jade-eta.vercel.app",
-    # "http://localhost:3000",
+    "http://localhost:3000",
 ]
