@@ -17,9 +17,6 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com", "127.0.0.1", "localhost"]
-
-
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -193,7 +190,10 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com"]
+# ALLOWED_HOSTS = ["online-shop-jfzj.onrender.com", "127.0.0.1", "localhost"]
+
 CORS_ALLOWED_ORIGINS = [
     "https://online-shop-jade-eta.vercel.app",
-    "http://localhost:3000",
+    # "http://localhost:3000",
 ]
